@@ -1,0 +1,8 @@
+# 個資與系統檔
+*.png
+*.jpg
+*.jpeg
+*.gif
+.DS_Store
+Thumbs.db
+desktop.ini
