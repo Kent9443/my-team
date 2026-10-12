@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI 計算器</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", "微軟正黑體", sans-serif;
+      background-color: #f4f6f9;
+      color: #333333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: #ffffff;
+      max-width: 460px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      padding: 32px 28px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #1a202c;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      color: #2d3748;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #3182ce;
+      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-submit {
+      background-color: #3182ce;
+      color: #ffffff;
+    }
+
+    .btn-submit:hover {
+      background-color: #2b6cb0;
+    }
+
+    .btn-reset {
+      background-color: #edf2f7;
+      color: #4a5568;
+    }
+
+    .btn-reset:hover {
+      background-color: #e2e8f0;
+    }
+
+    .error-box {
+      display: none;
+      background-color: #fff5f5;
+      color: #e53e3e;
+      border: 1px solid #feb2b2;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .result-box {
+      display: none;
+      background-color: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 22px 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .result-label {
+      font-size: 0.95rem;
+      color: #718096;
+      margin-bottom: 6px;
+    }
+
+    .result-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #2b6cb0;
+      line-height: 1.2;
+    }
+
+    .result-category {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .cat-underweight { background-color: #e2e8f0; color: #4a5568; }
+    .cat-normal      { background-color: #c6f6d5; color: #22543d; }
+    .cat-overweight  { background-color: #feebc8; color: #7b341e; }
+    .cat-obese1      { background-color: #fed7d7; color: #9b2c2c; }
+    .cat-obese2      { background-color: #feb2b2; color: #822727; }
+    .cat-obese3      { background-color: #fc8181; color: #63171b; }
+
+    .advice-card {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      text-align: left;
+      border-left: 4px solid #cbd5e0;
+      background-color: #edf2f7;
+      transition: all 0.2s ease;
+    }
+
+    .advice-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .advice-text {
+      font-size: 0.93rem;
+      line-height: 1.6;
+      color: #2d3748;
+    }
+
+    .advice-disclaimer {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: #718096;
+      border-top: 1px dashed rgba(0, 0, 0, 0.1);
+      padding-top: 6px;
+      text-align: right;
+    }
+
+    .advice-underweight { border-left-color: #718096; background-color: #f7fafc; }
+    .advice-normal      { border-left-color: #38a169; background-color: #f0fff4; }
+    .advice-overweight  { border-left-color: #dd6b20; background-color: #fffaf0; }
+    .advice-obese1      { border-left-color: #e53e3e; background-color: #fff5f5; }
+    .advice-obese2      { border-left-color: #c53030; background-color: #fff5f5; }
+    .advice-obese3      { border-left-color: #9b2c2c; background-color: #fff5f5; }
+
+    footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #718096;
+      line-height: 1.5;
+      border-top: 1px solid #edf2f7;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>BMI 計算器</h1>
+
+    <div class="form-group">
+      <label for="height">身高（公分）</label>
+      <input type="number" id="height" placeholder="請輸入身高，例如：170" step="any">
+    </div>
+
+    <div class="form-group">
+      <label for="weight">體重（公斤）</label>
+      <input type="number" id="weight" placeholder="請輸入體重，例如：65" step="any">
+    </div>
+
+    <div class="button-group">
+      <button type="button" class="btn-submit" id="btn-calculate">計算</button>
+      <button type="button" class="btn-reset" id="btn-reset">清除</button>
+    </div>
+
+    <div class="error-box" id="error-box"></div>
+
+    <div class="result-box" id="result-box">
+      <div class="result-label">您的身體質量指數 (BMI)</div>
+      <div class="result-value" id="result-bmi">--</div>
+      <div><span class="result-category" id="result-category">--</span></div>
+
+      <div class="advice-card" id="advice-card">
+        <div class="advice-title">💡 健康建議</div>
+        <div class="advice-text" id="advice-text">--</div>
+        <div class="advice-disclaimer">以上建議僅供參考，不能取代醫師診斷。</div>
+      </div>
+    </div>
+
+    <footer>
+      BMI 分級依國健署成人標準，孩童與孕婦不適用。
+    </footer>
+  </div>
+
+  <script>
+    const heightInput = document.getElementById('height');
+    const weightInput = document.getElementById('weight');
+    const btnCalculate = document.getElementById('btn-calculate');
+    const btnReset = document.getElementById('btn-reset');
+    const errorBox = document.getElementById('error-box');
+    const resultBox = document.getElementById('result-box');
+    const resultBmi = document.getElementById('result-bmi');
+    const resultCategory = document.getElementById('result-category');
+    const adviceCard = document.getElementById('advice-card');
+    const adviceText = document.getElementById('advice-text');
+
+    function showError(message) {
+      resultBox.style.display = 'none';
+      errorBox.textContent = message;
+      errorBox.style.display = 'block';
+    }
+
+    function hideError() {
+      errorBox.style.display = 'none';
+      errorBox.textContent = '';
+    }
+
+    function getBMICategory(bmi) {
+      if (bmi < 18.5) {
+        return {
+          text: '過輕',
+          className: 'cat-underweight',
+          themeClass: 'advice-underweight',
+          advice: '建議增加均衡熱量攝取，並評估是否有體重減輕的健康因素，必要時諮詢醫師或營養師。'
+        };
+      } else if (bmi < 24) {
+        return {
+          text: '體重正常',
+          className: 'cat-normal',
+          themeClass: 'advice-normal',
+          advice: '維持現有的飲食與運動習慣，並定期量測體重與腰圍。'
+        };
+      } else if (bmi < 27) {
+        return {
+          text: '過重',
+          className: 'cat-overweight',
+          themeClass: 'advice-overweight',
+          advice: '建議調整飲食內容並增加每週運動量，逐步達到理想體重。'
+        };
+      } else if (bmi < 30) {
+        return {
+          text: '輕度肥胖',
+          className: 'cat-obese1',
+          themeClass: 'advice-obese1',
+          advice: '建議飲食、運動雙管齊下，並每 3 個月追蹤體重變化，可尋求門診或營養門診協助。'
+        };
+      } else if (bmi < 35) {
+        return {
+          text: '中度肥胖',
+          className: 'cat-obese2',
+          themeClass: 'advice-obese2',
+          advice: '建議儘速尋求醫師與營養師協助，評估合併慢性病風險並擬定減重計畫。'
+        };
+      } else {
+        return {
+          text: '重度肥胖',
+          className: 'cat-obese3',
+          themeClass: 'advice-obese3',
+          advice: '建議立即就醫，由醫療團隊評估減重治療方式，並同步檢查血糖、血壓與血脂。'
+        };
+      }
+    }
+
+    function calculateBMI() {
+      hideError();
+
+      const heightRaw = heightInput.value.trim();
+      const weightRaw = weightInput.value.trim();
+
+      if (heightRaw === '' || weightRaw === '') {
+        showError('請完整輸入身高與體重數值。');
+        return;
+      }
+
+      const heightCm = Number(heightRaw);
+      const weightKg = Number(weightRaw);
+
+      if (Number.isNaN(heightCm) || Number.isNaN(weightKg)) {
+        showError('輸入格式不正確，請輸入數字。');
+        return;
+      }
+
+      if (heightCm <= 0 || weightKg <= 0) {
+        showError('身高與體重必須為大於 0 的正數。');
+        return;
+      }
+
+      const heightM = heightCm / 100;
+      const rawBmi = weightKg / (heightM * heightM);
+
+      // 標準四捨五入至小數點後一位，分級判定亦使用進位後的值
+      const bmiFormatted = rawBmi.toFixed(1);
+      const bmiValue = parseFloat(bmiFormatted);
+
+      const category = getBMICategory(bmiValue);
+
+      resultBmi.textContent = bmiFormatted;
+      resultCategory.textContent = category.text;
+      resultCategory.className = 'result-category ' + category.className;
+
+      adviceText.textContent = category.advice;
+      adviceCard.className = 'advice-card ' + category.themeClass;
+
+      resultBox.style.display = 'block';
+    }
+
+    btnCalculate.addEventListener('click', calculateBMI);
+
+    btnReset.addEventListener('click', () => {
+      heightInput.value = '';
+      weightInput.value = '';
+      hideError();
+      resultBox.style.display = 'none';
+      adviceText.textContent = '';
+      adviceCard.className = 'advice-card';
+      heightInput.focus();
+    });
+
+    [heightInput, weightInput].forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          calculateBMI();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

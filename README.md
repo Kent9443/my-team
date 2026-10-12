@@ -16,7 +16,8 @@ workspace/
 ## BMI 計算器 / BMI Calculator
 
 本專案於 `workspace/outbox/` 內包含符合衛生福利部國民健康署成人標準的單一檔案 BMI 計算器：
-- **當前有效版本（v2）**：[`workspace/outbox/20261012-bmi-calculator-v2.html`](workspace/outbox/20261012-bmi-calculator-v2.html)
+- **健康建議版（v4）**：[`workspace/outbox/20261012-bmi-calculator-v4.html`](workspace/outbox/20261012-bmi-calculator-v4.html)
+- **標準版（v2）**：[`workspace/outbox/20261012-bmi-calculator-v2.html`](workspace/outbox/20261012-bmi-calculator-v2.html)
 - **初始版本（v1）**：[`workspace/outbox/20261012-bmi-calculator.html`](workspace/outbox/20261012-bmi-calculator.html)
 
 ### 如何開啟使用
